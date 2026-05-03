@@ -1,25 +1,26 @@
-# 🎮 GTA World 同款姓名显示插件 v1.0.0
+# 🎮 GTA World Style Nametag Plugin v1.0.0
 
-> FiveM 高性能头顶姓名显示插件，同时支持 **ESX** / **QBCore** / **QBox** 三大框架
-
----
-
-## ✨ 功能特点
-
-- 🎯 **GTA World 同款风格** — 玩家头顶显示 `角色姓名 (ID)` 格式
-- 🔧 **三框架支持** — 自动检测 ESX / QBCore / QBox (qbx_core)
-- ⚡ **极致性能优化** — 双线程架构，不会造成任何卡顿
-- 📏 **距离渐变透明** — 远距离自动淡出，近距离清晰显示
-- 🎤 **语音指示器** — 说话时显示语音标识
-- 🔄 **自动名称同步** — 服务端缓存 + 定时同步
-- 🛡️ **禁用原生名牌** — 自动关闭 GTA 自带的头顶显示
-- 🐛 **内置调试命令** — `/nametag_debug` 快速排查问题
+> High-performance overhead nametag display plugin for FiveM, supporting **ESX** / **QBCore** / **QBox** frameworks
 
 ---
 
-## 📦 安装步骤
+## ✨ Features
 
-### 1. 放置资源
+- 🎯 **GTA World Style** — Displays `Character Name [ID]` above players' heads
+- 🔧 **Three Framework Support** — Auto-detects ESX / QBCore / QBox (qbx_core)
+- ⚡ **Extreme Performance Optimization** — Dual-thread architecture, zero stuttering
+- 📏 **Distance-Based Fade** — Auto fades at long range, crisp at close range
+- 🎤 **Voice Indicator** — Shows voice icon when a player is speaking
+- 🔄 **Auto Name Sync** — Server-side caching + periodic sync
+- 🛡️ **Disables Native Nametags** — Automatically removes GTA's built-in overhead display
+- 🔴 **Damage Flash** — Name turns red for 3 seconds when a player takes damage
+- 🐛 **Built-in Debug Command** — `/nametag_debug` for quick troubleshooting
+
+---
+
+## 📦 Installation
+
+### 1. Place the Resource
 ```
 resources/
   └── gtaworld-nametag/
@@ -29,82 +30,87 @@ resources/
       └── client.lua
 ```
 
-### 2. 添加启动项
-在 `server.cfg` 中添加（**确保在框架之后**）：
+### 2. Add to Server Config
+Add the following to `server.cfg` (**must be placed after your framework**):
 ```cfg
-ensure qbx_core           # QBox 用户
-# ensure qb-core          # QBCore 用户
-# ensure es_extended       # ESX 用户
+ensure qbx_core           # QBox users
+# ensure qb-core          # QBCore users
+# ensure es_extended       # ESX users
 
 ensure gtaworld-nametag
 ```
 
-### 3. 重启服务器
+### 3. Restart the Server
 
 ---
 
-## ⚙️ 配置说明 (`config.lua`)
+## ⚙️ Configuration (`config.lua`)
 
-| 配置项 | 默认值 | 说明 |
-|--------|--------|------|
+| Option | Default | Description |
+|--------|---------|-------------|
 | `Config.Framework` | `'auto'` | `'auto'` / `'esx'` / `'qbcore'` / `'qbox'` |
-| `Config.MaxDistance` | `30.0` | 最大显示距离（米） |
-| `Config.FadeStartDistance` | `20.0` | 开始淡出的距离 |
-| `Config.FontScale` | `0.30` | 字体大小 |
-| `Config.DisplayFormat` | `'{name} ({id})'` | 显示格式 |
-| `Config.ShowOwnName` | `false` | 是否显示自己的名字 |
-| `Config.RequireLOS` | `true` | 是否需要视线可见 |
-| `Config.ShowVoiceIndicator` | `true` | 是否显示语音指示器 |
+| `Config.MaxDistance` | `30.0` | Maximum display distance (meters) |
+| `Config.FadeStartDistance` | `20.0` | Distance at which fading begins |
+| `Config.FontScale` | `0.30` | Font size |
+| `Config.DisplayFormat` | `'{name} [{id}]'` | Display format |
+| `Config.ShowOwnName` | `false` | Whether to show your own name |
+| `Config.RequireLOS` | `true` | Require line of sight to display |
+| `Config.ShowVoiceIndicator` | `true` | Show voice activity indicator |
+| `Config.DamageColorEnabled` | `true` | Enable red flash on damage |
+| `Config.DamageColor` | `{255, 0, 0}` | Color when damaged (RGB) |
+| `Config.DamageDuration` | `3000` | Damage color duration (ms) |
 
-### 显示格式示例
+### Display Format Examples
 ```lua
-Config.DisplayFormat = '{name} ({id})'    -- "JackPerils [1]"
-Config.DisplayFormat = '[{id}] {name}'    -- "[1] JackPerils"
-Config.DisplayFormat = 'ID:{id} | {name}' -- "ID:1 | JackPerils"
+Config.DisplayFormat = '{name} [{id}]'    -- "Jack Perils [1]"
+Config.DisplayFormat = '[{id}] {name}'    -- "[1] Jack Perils"
+Config.DisplayFormat = 'ID:{id} | {name}' -- "ID:1 | Jack Perils"
 ```
 
 ---
 
-## 🎮 游戏内命令
+## 🎮 In-Game Commands
 
-| 命令 | 说明 |
-|------|------|
-| `/nametag` | 切换姓名显示开关 |
-| `/nametag_debug` | 显示调试信息（玩家数据状态） |
+| Command | Description |
+|---------|-------------|
+| `/nametag` | Toggle nametag display on/off |
+| `/nametag_debug` | Show debug info (player data status) |
 
-## 🔧 服务端调试命令
+## 🔧 Server Console Commands
 
-在 txAdmin / 服务器控制台输入：
+Enter the following in txAdmin / server console:
 ```
 nametag_debug
 ```
-可查看框架类型和所有在线玩家姓名。
+Displays framework type and all online player names.
 
 ---
 
-## ⚡ 性能优化架构
+## ⚡ Performance Architecture
 
-
-| 场景 | 耗时 |
-|------|------|
-| 空闲（附近无人） | ~0.00 ms |
-| 5 个可见玩家 | ~0.01 ms |
-| 10 个可见玩家 | ~0.02 ms |
+| Scenario | Cost |
+|----------|------|
+| Idle (no nearby players) | ~0.00 ms |
+| 5 visible players | ~0.01 ms |
+| 10 visible players | ~0.02 ms |
 
 ---
 
-## ❓ 常见问题
+## ❓ FAQ
 
-**Q: 完全不显示？**
-1. 输入 `/nametag_debug` 查看 `dataReceived` 是否为 `true`
-2. 服务端控制台输入 `nametag_debug` 查看框架检测结果
-3. 确认 `server.cfg` 中 `ensure gtaworld-nametag` 在框架之后
+**Q: Nothing displays at all?**
+1. Type `/nametag_debug` and check if `dataReceived` is `true`
+2. Type `nametag_debug` in the server console to verify framework detection
+3. Make sure `ensure gtaworld-nametag` comes after your framework in `server.cfg`
 
-**Q: QBox 下不显示角色名？**
-> 手动设置 `Config.Framework = 'qbox'`
+**Q: Names don't show under QBox?**
+> Manually set `Config.Framework = 'qbox'`
 
-**Q: 显示 Steam 名而不是角色名？**
-> 框架可能未完全加载角色数据。ESX 需要 identity 模块。
+**Q: Showing Steam name instead of character name?**
+> The framework may not have fully loaded character data yet. ESX requires the `identity` module.
+
+**Q: How does damage detection work?**
+> The scanner thread monitors each player's health every 500ms. When HP decreases, the name turns red for 3 seconds (configurable via `Config.DamageDuration`).
 
 ---
 
